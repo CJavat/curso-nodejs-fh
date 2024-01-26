@@ -4,8 +4,18 @@
   "description": "Esta es mi primera aplicacion real de node",
   "main": "app.js",
   "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "CJavatX",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "get-age": "^1.0.1",
+    "uuid": "^9.0.1"
+  }
 }
