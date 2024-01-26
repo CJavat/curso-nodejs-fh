@@ -11,5 +11,10 @@
 
 // console.log({ john });
 
-const getPokemonById = require("./js-foundation/06-promises");
-getPokemonById( 1 ).then( resp => console.log( resp ) );
+// const getPokemonById = require("./js-foundation/06-promises");
+// getPokemonById( 1 ).then( resp => console.log( resp ) );
+
+const { buildLogger } = require("./plugins");
+const logger = buildLogger( 'app.js' );
+
+logger.log("hola mundo");
