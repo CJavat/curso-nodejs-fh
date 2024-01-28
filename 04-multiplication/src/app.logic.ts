@@ -1,19 +1,24 @@
 import fs from "fs";
-
+import { yarg } from "./config/plugins/yargs.plugin";
 
 let outputMessage = '';
-const base = 5;
+const base = yarg.b;
+
 const headerMessage = `
 ====================
   TABLA DEL ${ base }
 ====================
 `;
 
-for( let i = 1; i <= 10; i++ ) {
+for( let i = 1; i <= yarg.l; i++ ) {
   outputMessage += `${ base } x ${ i } = ${ base * i }\n`;
 }
 
-outputMessage = headerMessage + outputMessage;
+const outputPath = `outputs`;
 
-console.log( outputMessage );
-fs.writeFileSync(`outputs/tabla-${ base }.txt`, outputMessage);
+
+fs.mkdirSync( outputPath, { recursive: true } );
+fs.writeFileSync(`${ outputPath }/tabla-${ base }.txt`, outputMessage);
+console.log("File created!");
+
+
