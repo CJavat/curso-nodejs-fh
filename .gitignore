@@ -1,3 +1,13 @@
 node_modules/
 dist/
 outputs/
+
+# LOGS
+.DS_Store
+
+/logs
+
+.env
+
+mongo/
+postgres/
