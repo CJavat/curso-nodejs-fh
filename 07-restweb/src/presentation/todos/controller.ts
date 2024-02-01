@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
+import { prisma } from "../../data/postgres";
 
 const todos = [
-  { id: 1, text: "Buy milk", createdAt: new Date() },
-  { id: 2, text: "Buy bread", createdAt: null },
-  { id: 3, text: "Buy butter", createdAt: new Date() },
+  { id: 1, text: "Buy milk", completedAt: new Date() },
+  { id: 2, text: "Buy bread", completedAt: null },
+  { id: 3, text: "Buy butter", completedAt: new Date() },
 ];
 
 
@@ -28,20 +29,15 @@ export class TodosController {
       : res.status( 404 ).json({ error: `Todo with id ${ id } not found` })
   }
 
-  public createTodo = ( req: Request, res: Response ) => {
+  public createTodo = async ( req: Request, res: Response ) => {
     const { text } = req.body;
     if( !text ) return res.status( 400 ).json({ error: 'Text property is required'});
 
-    const newTodo = {
-      id: todos.length + 1,
-      text: text,
-      createdAt: null
-    }
+    const todo = await prisma.todo.create({
+      data: { text }
+    });
 
-    todos.push( newTodo );
-
-
-    res.json( newTodo );
+    res.json( todo );
   };
 
   public updateTodo = ( req: Request, res: Response ) => {
@@ -51,12 +47,12 @@ export class TodosController {
     const todo = todos.find( todo => todo.id === id );
     if( !todo ) return res.status( 404 ).json({ error: `Todo with id ${ id } not found` });
 
-    const { text, createdAt } = req.body;
+    const { text, completedAt } = req.body;
 
     todo.text = text || todo.text;
-    ( createdAt === 'null' )
-      ? todo.createdAt = null
-      : todo.createdAt = new Date( createdAt || todo.createdAt )
+    ( completedAt === 'null' )
+      ? todo.completedAt = null
+      : todo.completedAt = new Date( completedAt || todo.completedAt )
 
 
     todo.text = text;
