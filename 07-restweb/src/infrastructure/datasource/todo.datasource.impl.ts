@@ -17,12 +17,12 @@ export class TodoDatasourceImpl implements TodoDatasource {
   }
 
   async findById(id: number): Promise<TodoEntity> {
-    const todo = await prisma.todo.findFirst({
+    const todo = await prisma.todo.findUnique({
       where: { id },
     });
 
     if( !id ) throw `Todo with id ${id} not found`;
-    return TodoEntity.formObject({ todo }); //! PUEDE ESTAR MAL ESTO.
+    return TodoEntity.formObject( todo! );
   }
 
   async updateById(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
