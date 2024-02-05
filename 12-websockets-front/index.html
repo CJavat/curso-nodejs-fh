@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WEBSOCKETS - STATUS</title>
+</head>
+<body>
+  <h1>WEBSOCKETS</h1>
+  <form>
+    <input type="text" placeholder="Enviar Mensaje">
+    <button>Enviar</button>
+  </form>
+
+  <ul id="messages">
+
+  </ul>
+
+  <script>
+    const form = document.querySelector("form");
+    const input = document.querySelector("input");
+    const messagesElem = document.querySelector("#messages");
+    
+    function connectToServer() {
+      const socket = new WebSocket("ws://localhost:3000");
+      
+      function sendMessage( message ) {
+        socket.send( message );
+      }
+  
+      function renderMessage( message ) {
+        const li = document.createElement("li");
+        li.innerHTML = message;
+        messagesElem.prepend(li);
+      }
+  
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+  
+        const message = input.value;
+        sendMessage( message );
+        input.value = "";
+  
+      });
+  
+      socket.onopen = ( evt ) => {
+        console.log(evt);
+        console.log("Conectado");
+      };
+  
+      socket.onclose = ( evt ) => {
+        console.log(evt);
+        console.log("Desconectado");
+
+        setTimeout(() => {
+          connectToServer();
+        }, 2000);
+      };
+  
+      socket.onmessage = ( evt ) => {
+        const { payload } = JSON.parse( evt.data );
+        renderMessage( payload );
+      };
+    }
+
+    connectToServer();
+  </script>
+</body>
+</html>
